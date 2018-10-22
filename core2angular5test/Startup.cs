@@ -50,7 +50,22 @@ namespace core2angular5test
             }
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();//Pozwala na pobieranie rzeczy z wwwroot
+            app.UseStaticFiles(new StaticFileOptions() {
+                OnPrepareResponse = (context) =>
+                {
+                    // Disable caching for all static files.
+                    context.Context.Response.Headers["Cache-Control"] = Configuration["StaticFiles:Headers:Cache-Control"];
+                    context.Context.Response.Headers["Pragma"] = Configuration["StaticFiles:Headers:Pragma"];
+                    context.Context.Response.Headers["Expires"] = Configuration["StaticFiles:Headers:Expires"];
+                    //TODO: POCO configuration retrieval options
+                    /*
+                     * https:/​/​weblog.​west-​wind.​com/​posts/​2016/​may/​23/​strongly-​typed-​configuration- settings-​in-​aspnet-​core
+                     * https:/​/​www.​strathweb.​com/​2016/​09/​strongly-​typed-​configuration-​in-​asp-​net-​core- without-​ioptionst/​
+                     * https:/​/​rimdev.​io/​strongly-​typed-​configuration-​settings-​in-​asp-​net-​core-​part- ii/​
+                     */
+                    
+                } 
+            });//Pozwala na pobieranie rzeczy z wwwroot
             app.UseSpaStaticFiles();            
 
             app.UseMvc(routes =>

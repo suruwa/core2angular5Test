@@ -29,3 +29,9 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## MOJE NOTATKI:
 W Rider pod mac os trzeba było dodać ustawić zmienną środowiskową
 `ASPNETCORE_ENVIRONMENT=DEVELOPMENT` w edit configuration
+
+Patch releases: 1.0 or 1.0.x or ~1.0.4
+  
+Minor releases: 1 or 1.x or ^1.0.4
+
+Major releases: * or x
