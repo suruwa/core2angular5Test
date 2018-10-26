@@ -25,6 +25,8 @@ namespace core2angular5test
         // and configure dependency injection
         public void ConfigureServices(IServiceCollection services)
         {
+            //Registering MVC using the Dependency Injection framework built into
+            //ASP.NET Core
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
@@ -66,15 +68,24 @@ namespace core2angular5test
                     
                 } 
             });//Pozwala na pobieranie rzeczy z wwwroot
-            app.UseSpaStaticFiles();            
+            app.UseSpaStaticFiles();
 
+            //Adding the required middleware to the HTTP request pipeline, while also
+            //(optionally) setting a pack of default routes
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action=Index}/{id?}");
+
+                //TODO: Nieużywane w książce, dlaczego?
+                //routes.MapSpaFallbackRoute(
+                //    name: "spa-fallback",
+                //    defaults: new { controller = "Home", action = "Index" });
             });
 
+
+            //TODO: jak się używa spaservices?
             app.UseSpa(spa =>
             {
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
