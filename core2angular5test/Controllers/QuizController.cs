@@ -53,7 +53,7 @@ namespace core2angular5test
         /// <param name="num">the number of quizzes to retrieve</param>
         /// <returns>the {num} latest Quizzes</returns>
         // GET api/quiz/latest
-        [HttpGet("Latest/{num}")]
+        [HttpGet("latest/{num}")]
         public IActionResult Latest(int num = 10)
         {
             var sampleQuizzes = new List<QuizViewModel>();

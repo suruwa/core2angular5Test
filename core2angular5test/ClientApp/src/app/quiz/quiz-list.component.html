@@ -1,0 +1,12 @@
+<h2>{{title}}</h2>
+<ul class="quizzes">
+  <li *ngFor="let quiz of quizzes"
+      [class.selected]="quiz === selectedQuiz"
+      (click)="onSelect(quiz)">
+  <span>{{quiz.Title}}</span>
+</li> </ul>
+<quiz *ngIf="selectedQuiz" [quiz]="selectedQuiz"></quiz>
+<!--the targets of a property binding must be wrapped into square brackets -->
+<!--so that they won't be mistaken for standard HTML attributes.-->
+
+
