@@ -1,4 +1,4 @@
-using core2angular5test.Data.Models;
+using core2angular5test.Data;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -108,6 +108,17 @@ namespace core2angular5test
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+            
+            // Create a service scope to get an ApplicationDbContext instance using DI
+            // TODO: co to jest service scope?
+            using (var serviceScope = app.ApplicationServices.GetRequiredService<IServiceScopeFactory>().CreateScope())
+            {
+                var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
+                // Create the Db if it doesn't exist and applies any pending migration
+                
+                dbContext.Database.Migrate();
+                DbSeeder.Seed(dbContext);
+            }
         }
     }
 }
