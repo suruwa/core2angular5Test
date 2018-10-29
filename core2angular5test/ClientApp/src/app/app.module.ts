@@ -10,6 +10,13 @@ import { HomeComponent } from './home/home.component';
 
 import { QuizListComponent} from "./quiz/quiz-list.component";
 import { QuizComponent} from "./quiz/quiz.component";
+import { PageNotFoundComponent } from "./pagenotfound/pagenotfound.component";
+import { AboutComponent} from "./about/about.component";
+import { LoginComponent } from "./login/login.component";
+
+//Routing
+//PathLocationStrategy - nowa technika, używa history.pushstate
+//HashLocationStrategy - stare przeglądarki, po hashu
 
 @NgModule({
   declarations: [
@@ -17,17 +24,31 @@ import { QuizComponent} from "./quiz/quiz.component";
     NavMenuComponent,
     HomeComponent,
     QuizListComponent,
-    QuizComponent
+    QuizComponent,
+    LoginComponent,
+    PageNotFoundComponent,
+    AboutComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
     HttpClientModule,
     FormsModule,
     RouterModule.forRoot([
-      { path: '', component: HomeComponent, pathMatch: 'full' }
+      { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'quiz/:id', component: QuizComponent },
+      { path: 'about', component: AboutComponent },
+      { path: 'login', component: LoginComponent },
+      { path: '**', component: PageNotFoundComponent }
+
+
+      //{ path: '', redirectTo: 'home', pathMatch: 'full' },
+      //{ path: 'home', component: HomeComponent },
+      //{ path: '**', redirectTo: 'home' }//global fallback
     ])
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
+
+

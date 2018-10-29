@@ -1,6 +1,6 @@
 import { Component, Inject, Input, OnInit } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
-import {l} from "@angular/core/src/render3";
+import { Router} from "@angular/router";
 
 @Component({
   selector: "quiz-list",
@@ -22,8 +22,9 @@ export class QuizListComponent implements OnInit{
   baseUrl: string;
 
   constructor(http: HttpClient,
-              @Inject('BASE_URL') baseUrl: string) //TODO: WTF is BASE_URL?
+              @Inject('BASE_URL') baseUrl: string, //TODO: WTF is BASE_URL?
               //@Inject - decorator użyty by poprzez DI zainicjować parametr baseurl
+              private router: Router)
   {
     this.http = http;
     this.baseUrl = baseUrl;
@@ -63,5 +64,7 @@ export class QuizListComponent implements OnInit{
     console.log("quiz with Id "
       + this.selectedQuiz.Id,
       + " has been selected.");
+
+    this.router.navigate(["quiz", this.selectedQuiz.Id]);
   }
 }
