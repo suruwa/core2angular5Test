@@ -92,6 +92,8 @@ namespace core2angular5test
                 //routes.MapSpaFallbackRoute(
                 //    name: "spa-fallback",
                 //    defaults: new { controller = "Home", action = "Index" });
+                
+                //HomeController - nieobecny?
             });
 
 

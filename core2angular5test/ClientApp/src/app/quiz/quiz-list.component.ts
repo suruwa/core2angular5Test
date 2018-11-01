@@ -30,6 +30,7 @@ export class QuizListComponent implements OnInit{
     this.baseUrl = baseUrl;
   }
 
+  //TODO: ngoninit???
   ngOnInit() {
     console.log("QuizListComponent " +
       " instantiated with the following class: "

@@ -1,0 +1,4 @@
+.answer-edit input[type="text"],
+.answer-edit textarea {
+    min-width: 500px;
+}

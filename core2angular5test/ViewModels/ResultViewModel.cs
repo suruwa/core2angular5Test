@@ -24,6 +24,8 @@ namespace core2angular5test.ViewModels
         [JsonIgnore]
         public DateTime CreatedDate { get; set; }
         public DateTime LastModifiedDate { get; set; }
+        public int? MinValue { get; set; }
+        public int? MaxValue { get; set; }
         #endregion
     }
 }
