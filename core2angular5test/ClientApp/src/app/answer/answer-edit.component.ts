@@ -25,10 +25,13 @@ export class AnswerEditComponent {
         this.answer = <Answer>{};
 
         var id = +this.activatedRoute.snapshot.params["id"];
-        if (id)
-        {
-            this.editMode = true;
 
+        // check if we're in edit mode or not
+        this.editMode = (this.activatedRoute.snapshot.url[1].path ===
+            "edit");
+
+        if (this.editMode)
+        {
             // fetch the quiz from the server
             var url = this.baseUrl + "api/answer/" + id;
             this.http.get<Answer>(url).subscribe(res => {

@@ -53,7 +53,7 @@ namespace core2angular5test.Controllers
         /// </summary>
         /// <param name="model">The AnswerViewModel containing the data to insert</param>
         [HttpPut]
-        public async Task<IActionResult> Put(AnswerViewModel model)
+        public async Task<IActionResult> Put([FromBody]AnswerViewModel model)
         {
             // return a generic HTTP Status 500 (Server Error)
             // if the client payload is invalid.
