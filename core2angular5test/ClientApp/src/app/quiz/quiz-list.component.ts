@@ -10,7 +10,7 @@ import { Router} from "@angular/router";
     it will be <quiz-list></quiz-list>
    */
   templateUrl: './quiz-list.component.html',
-  styleUrls: ['./quiz-list.component.css']
+  styleUrls: ['./quiz-list.component.less']
 })
 
 export class QuizListComponent implements OnInit{

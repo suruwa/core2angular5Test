@@ -40,6 +40,7 @@ namespace core2angular5test
                 options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
 
             // In production, the Angular files will be served from this directory
+            // FILES WILL BE CREATED WITH THE 'PublishRunWebpack' BUILD STEP IN 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
         }
 
@@ -100,10 +101,12 @@ namespace core2angular5test
             //TODO: jak się używa spaservices?
             app.UseSpa(spa =>
             {
+                // https://github.com/aspnet/JavaScriptServices
+                // https://github.com/aspnet/JavaScriptServices/blob/master/src/Microsoft.AspNetCore.SpaServices.Extensions/SpaApplicationBuilderExtensions.cs                 
                 // To learn more about options for serving an Angular SPA from ASP.NET Core,
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
-                spa.Options.SourcePath = "ClientApp";
+                spa.Options.SourcePath = "ClientApp";                
 
                 if (env.IsDevelopment())
                 {

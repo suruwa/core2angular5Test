@@ -5,7 +5,7 @@ import { HttpClient } from "@angular/common/http";
 @Component({
     selector: "answer-list",
     templateUrl: './answer-list.component.html',
-    styleUrls: ['./answer-list.component.css']
+    styleUrls: ['./answer-list.component.less']
 })
 
 export class AnswerListComponent implements OnChanges {
