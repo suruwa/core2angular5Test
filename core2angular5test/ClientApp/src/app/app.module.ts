@@ -19,6 +19,7 @@ import { QuestionEditComponent } from "./question/question-edit.component";
 import { AnswerListComponent } from "./answer/answer-list.component";
 import { AnswerEditComponent } from "./answer/answer-edit.component";
 import { ResultListComponent } from "./result/result-list.component";
+import { QuizSearchComponent} from "./quiz/quiz-search.component";
 
 //Routing
 //PathLocationStrategy - nowa technika, używa history.pushstate
@@ -39,7 +40,8 @@ import { ResultListComponent } from "./result/result-list.component";
         QuestionEditComponent,
         AnswerListComponent,
         AnswerEditComponent,
-        ResultListComponent
+        ResultListComponent,
+        QuizSearchComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
