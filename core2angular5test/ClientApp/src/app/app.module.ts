@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 
@@ -20,6 +20,7 @@ import { AnswerListComponent } from "./answer/answer-list.component";
 import { AnswerEditComponent } from "./answer/answer-edit.component";
 import { ResultListComponent } from "./result/result-list.component";
 import { QuizSearchComponent} from "./quiz/quiz-search.component";
+import {ResultEditComponent} from "./result/result-edit.component";
 
 //Routing
 //PathLocationStrategy - nowa technika, używa history.pushstate
@@ -41,33 +42,37 @@ import { QuizSearchComponent} from "./quiz/quiz-search.component";
         AnswerListComponent,
         AnswerEditComponent,
         ResultListComponent,
-        QuizSearchComponent
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    RouterModule.forRoot([
-        { path: '', component: HomeComponent, pathMatch: 'full' },
-        { path: 'home', component: HomeComponent },
-        { path: 'quiz/create', component: QuizEditComponent },//przed :id koniecznie
-        { path: 'quiz/edit/:id', component: QuizEditComponent },
-        { path: 'quiz/:id', component: QuizComponent },
-        { path: 'question/create/:id', component: QuestionEditComponent },
-        { path: 'question/edit/:id', component: QuestionEditComponent },
-        { path: 'answer/edit/:id', component: AnswerEditComponent },
-        { path: 'answer/create/:id', component: AnswerEditComponent },
-        { path: 'about', component: AboutComponent },
-        { path: 'login', component: LoginComponent },
-        { path: '**', component: PageNotFoundComponent }
+        QuizSearchComponent,
+        ResultEditComponent
+    ],
+    imports: [
+        BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
+        HttpClientModule,
+        FormsModule,
+        ReactiveFormsModule,
+        RouterModule.forRoot([
+            { path: '', component: HomeComponent, pathMatch: 'full' },
+            { path: 'home', component: HomeComponent },
+            { path: 'quiz/create', component: QuizEditComponent },//przed :id koniecznie
+            { path: 'quiz/edit/:id', component: QuizEditComponent },
+            { path: 'quiz/:id', component: QuizComponent },
+            { path: 'question/create/:id', component: QuestionEditComponent },
+            { path: 'question/edit/:id', component: QuestionEditComponent },
+            { path: 'answer/edit/:id', component: AnswerEditComponent },
+            { path: 'answer/create/:id', component: AnswerEditComponent },
+            { path: 'result/edit/:id', component: ResultEditComponent },
+            { path: 'result/create/:id', component: ResultEditComponent },
+            { path: 'about', component: AboutComponent },
+            { path: 'login', component: LoginComponent },
+            { path: '**', component: PageNotFoundComponent }
 
-      //{ path: '', redirectTo: 'home', pathMatch: 'full' },
-      //{ path: 'home', component: HomeComponent },
-      //{ path: '**', redirectTo: 'home' }//global fallback
-    ])
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+          //{ path: '', redirectTo: 'home', pathMatch: 'full' },
+          //{ path: 'home', component: HomeComponent },
+          //{ path: '**', redirectTo: 'home' }//global fallback
+        ])
+    ],
+    providers: [],
+    bootstrap: [AppComponent]
 })
 export class AppModule { }
 

@@ -58,7 +58,7 @@ export class QuestionListComponent implements OnChanges {
 
     onDelete(question: Question) {
         if (confirm("Do you really want to delete this question")) {
-            var url = this.baseUrl + "api/question" + question.Id;
+            var url = this.baseUrl + "api/question/" + question.Id;
             this.http
                 .delete(url)
                 .subscribe(res => {
