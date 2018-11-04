@@ -1,9 +1,10 @@
 using core2angular5test.Data.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace core2angular5test.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         #region constructor
         public ApplicationDbContext(DbContextOptions options) :
@@ -56,8 +57,7 @@ namespace core2angular5test.Data
         
         #endregion
         
-        #region Properties
-        public DbSet<ApplicationUser> Users { get; set; }
+        #region Properties        
         public DbSet<Quiz> Quizzes { get; set; }
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }

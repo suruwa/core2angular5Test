@@ -1,10 +1,11 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Identity;
 
 namespace core2angular5test.Data.Models
 {
-    public class ApplicationUser
+    public class ApplicationUser : IdentityUser
     {
         #region constructor
         public ApplicationUser()
@@ -13,17 +14,7 @@ namespace core2angular5test.Data.Models
         }
         #endregion
         
-        #region properties
-        [Key]
-        [Required]
-        public string Id { get; set; }
-        
-        [Required]
-        [MaxLength(128)]
-        public string UserName { get; set; }
-        
-        [Required]
-        public string Email { get; set; }
+        #region properties        
         
         public string Notes { get; set; }
         

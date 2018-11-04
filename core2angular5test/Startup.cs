@@ -1,7 +1,9 @@
 using core2angular5test.Data;
+using core2angular5test.Data.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.AspNetCore.SpaServices.Webpack;
@@ -37,7 +39,23 @@ namespace core2angular5test
             
             //Add ApplicationDbContext
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
+                options
+                    .UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+                    //.EnableSensitiveDataLogging()
+                );
+            
+            // Add ASP .NET Identity support
+            // https://github.com/aspnet/Identity/blob/95205d99944d6f512b61ac3d508e92662fcd3169/src/Identity/IdentityServiceCollectionExtensions.cs
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+                opts =>
+                {
+                    opts.Password.RequireDigit = true;
+                    opts.Password.RequireLowercase = true;
+                    opts.Password.RequireUppercase = true;
+                    opts.Password.RequireNonAlphanumeric = false;
+                    opts.Password.RequiredLength = 7;
+                }
+            ).AddEntityFrameworkStores<ApplicationDbContext>();
 
             // In production, the Angular files will be served from this directory
             // FILES WILL BE CREATED WITH THE 'PublishRunWebpack' BUILD STEP IN 
@@ -120,9 +138,13 @@ namespace core2angular5test
             {
                 var dbContext = serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
                 // Create the Db if it doesn't exist and applies any pending migration
-                
+
+                var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+
+                var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+                                                
                 dbContext.Database.Migrate();
-                DbSeeder.Seed(dbContext);
+                DbSeeder.Seed(dbContext, roleManager, userManager);
             }
         }
     }
