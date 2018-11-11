@@ -8,7 +8,10 @@ using System.Threading.Tasks;
 using core2angular5test.Data;
 using core2angular5test.Data.Models;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -18,7 +21,11 @@ namespace core2angular5test.Controllers
     public class QuestionController : BaseApiController
     {                        
         #region Constructor
-        public QuestionController(ApplicationDbContext context) : base(context)
+        public QuestionController(ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager, 
+            UserManager<ApplicationUser> userManager, 
+            IConfiguration configuration) 
+            : base(context, roleManager, userManager, configuration)
         {
             
         }
@@ -54,6 +61,7 @@ namespace core2angular5test.Controllers
         /// </summary>
         /// <param name="model">The QuestionViewModel containing the data to insert</param>
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Put([FromBody] QuestionViewModel model)
         {
             // return a generic HTTP Status 500 (Server Error)
@@ -86,6 +94,7 @@ namespace core2angular5test.Controllers
         /// </summary>
         /// <param name="model">The QuestionViewModel containing the data to update</param>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] QuestionViewModel model)
         {
             // return a generic HTTP Status 500 (Server Error)
@@ -121,6 +130,7 @@ namespace core2angular5test.Controllers
         /// <param name="id"></param>
         /// <returns></returns>
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             // retrieve the question from the Database

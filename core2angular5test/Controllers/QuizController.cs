@@ -4,12 +4,16 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using core2angular5test.Controllers;
 using core2angular5test.Data;
 using core2angular5test.Data.Models;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -25,7 +29,12 @@ namespace core2angular5test
         
         #region constructor
 
-        public QuizController(ApplicationDbContext context) : base(context)
+        public QuizController(
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager, 
+            UserManager<ApplicationUser> userManager, 
+            IConfiguration configuration) 
+            : base(context, roleManager, userManager, configuration)
         {
             
         }
@@ -60,7 +69,8 @@ namespace core2angular5test
         /// Adds a new Quiz to the Database
         /// </summary>
         /// <param name="model">The QuizViewModel containing the data to insert</param>
-        [HttpPut] 
+        [HttpPut]
+        [Authorize]
         public async Task<IActionResult> Put([FromBody] QuizViewModel model)
         {
             // return a generic HTTP Status 500 (Server Error)
@@ -82,8 +92,7 @@ namespace core2angular5test
             
             // Set a temporary author using the Admin user's userId
             // as user login isn't supported yet: we'll change this later on.
-            quiz.UserId = (await DbContext.Users
-                .FirstOrDefaultAsync(u => u.UserName == "Admin")).Id;
+            quiz.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             // add the new quiz
             DbContext.Quizzes.Add(quiz);
             
@@ -98,6 +107,7 @@ namespace core2angular5test
         /// </summary>
         /// <param name="model">The QuizViewModel containing the data to update</param>
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Post([FromBody] QuizViewModel model)
         {
             // return a generic HTTP Status 500 (Server Error)
@@ -137,6 +147,7 @@ namespace core2angular5test
         /// </summary>
         /// <param name="id">The ID of an existing Test</param>
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             // retrieve the quiz from the Database

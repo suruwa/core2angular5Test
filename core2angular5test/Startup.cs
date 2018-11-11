@@ -1,5 +1,8 @@
+using System;
+using System.Text;
 using core2angular5test.Data;
 using core2angular5test.Data.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +13,7 @@ using Microsoft.AspNetCore.SpaServices.Webpack;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
 using Npgsql.EntityFrameworkCore.PostgreSQL;
 
 namespace core2angular5test
@@ -57,6 +61,35 @@ namespace core2angular5test
                 }
             ).AddEntityFrameworkStores<ApplicationDbContext>();
 
+            // Add authentication with JWT tokens
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;                
+            })
+            .AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    // standard configuration
+                    ValidIssuer = Configuration["Auth:Jwt:Issuer"],
+                    ValidAudience = Configuration["Auth:Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"])),
+                    ClockSkew = TimeSpan.Zero,
+
+                    // security switches, can be enabled/disabled during debugging
+                    // if token validation fails
+                    RequireExpirationTime = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = true
+                };
+            });
+
             // In production, the Angular files will be served from this directory
             // FILES WILL BE CREATED WITH THE 'PublishRunWebpack' BUILD STEP IN 
             services.AddSpaStaticFiles(configuration => { configuration.RootPath = "ClientApp/dist"; });
@@ -96,8 +129,13 @@ namespace core2angular5test
                      */
                     
                 } 
-            });//Pozwala na pobieranie rzeczy z wwwroot
+            });
+            
+            // Pozwala na pobieranie rzeczy z wwwroot
             app.UseSpaStaticFiles();
+
+            // Add the AuthenticationMiddleware to the pipeline 
+            app.UseAuthentication();
 
             //Adding the required middleware to the HTTP request pipeline, while also
             //(optionally) setting a pack of default routes

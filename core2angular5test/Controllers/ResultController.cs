@@ -6,8 +6,11 @@ using core2angular5test.Data;
 using core2angular5test.Data.Models;
 using core2angular5test.ViewModels;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -19,7 +22,12 @@ namespace core2angular5test.Controllers
         public class ResultController : BaseApiController
         {            
             #region Constructor
-            public ResultController(ApplicationDbContext context) : base(context)
+            public ResultController(
+                ApplicationDbContext context,
+                RoleManager<IdentityRole> roleManager, 
+                UserManager<ApplicationUser> userManager, 
+                IConfiguration configuration) 
+                : base(context, roleManager, userManager, configuration)
             {
                 // Instantiate the ApplicationDbContext through DI                
             }
@@ -53,6 +61,7 @@ namespace core2angular5test.Controllers
             /// </summary>
             /// <param name="model">The ResultViewModel containing the data to insert</param>
             [HttpPut]
+            [Authorize]
             public async Task<IActionResult> Put([FromBody] ResultViewModel model)
             {
                 // return a generic HTTP Status 500 (Server Error)
@@ -78,6 +87,7 @@ namespace core2angular5test.Controllers
             /// </summary>
             /// <param name="model">The ResultViewModel containing the data to update</param>
             [HttpPost]
+            [Authorize]
             public async Task<IActionResult> Post([FromBody] ResultViewModel model)
             {
                 // return a generic HTTP Status 500 (Server Error)
@@ -114,6 +124,7 @@ namespace core2angular5test.Controllers
             /// </summary>
             /// <param name="id">The ID of an existing Result</param>
             [HttpDelete("{id}")]
+            [Authorize]
             public async Task<IActionResult> Delete(int id)
             {
                 // retrieve the result from the Database
