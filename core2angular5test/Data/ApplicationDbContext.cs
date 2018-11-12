@@ -25,6 +25,8 @@ namespace core2angular5test.Data
             modelBuilder.Entity<ApplicationUser>().ToTable("Users");
             modelBuilder.Entity<ApplicationUser>().HasMany(u =>
                 u.Quizzes).WithOne(i => i.User);
+            modelBuilder.Entity<ApplicationUser>().HasMany(u =>
+                u.Tokens).WithOne(t => t.User);
             
             modelBuilder.Entity<Quiz>().ToTable("Quizzes");
             modelBuilder.Entity<Quiz>().Property(i =>
@@ -38,7 +40,7 @@ namespace core2angular5test.Data
             modelBuilder.Entity<Question>().Property(i =>
                 i.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Question>().HasOne(i =>
-                i.Quiz).WithMany(u =>    u.Questions);
+                i.Quiz).WithMany(u => u.Questions);
             modelBuilder.Entity<Question>().HasMany(i =>
                 i.Answers).WithOne(c => c.Question);
             
@@ -53,6 +55,11 @@ namespace core2angular5test.Data
                 i.Id).ValueGeneratedOnAdd();
             modelBuilder.Entity<Result>().HasOne(i =>
                 i.Quiz).WithMany(u => u.Results);
+            
+            modelBuilder.Entity<Token>().ToTable("Tokens");
+            //TODO: Is this needed if Key attribute has already been specified?
+            modelBuilder.Entity<Token>().Property(i => i.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Token>().HasOne(i => i.User).WithMany(u => u.Tokens);
         }
         
         #endregion
@@ -62,6 +69,7 @@ namespace core2angular5test.Data
         public DbSet<Question> Questions { get; set; }
         public DbSet<Answer> Answers { get; set; }
         public DbSet<Result> Results { get; set; }
+        public DbSet<Token> Tokens { get; set; }
         #endregion Properties
     }
 }
