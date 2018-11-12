@@ -28,7 +28,8 @@ export class AuthResponseInterceptor implements HttpInterceptor {
         this.auth = this.injector.get(AuthService);
         var token = (this.auth.isLoggedIn()) ? this.auth.getAuth()!.token : null;
 
-        if (token) {
+        //if (token && !request.url.includes("api/auth/jwt")) {// ignore refresh token requests
+        if (token) { // used fix from https://github.com/PacktPublishing/ASP.NET-Core-2-and-Angular-5/issues/8
             // save current request
             this.currentRequest = request;
 
@@ -39,42 +40,53 @@ export class AuthResponseInterceptor implements HttpInterceptor {
                     }
                 })
                 .catch(err => {
-                    return this.handleError(err);
+                    return this.handleError(err, next);
                 });
         } else {
             return next.handle(request);
         }
     }
 
-    handleError(err: any) {
+    handleError(err: any, next: HttpHandler) {
         if (err instanceof HttpErrorResponse) {
             if (err.status == 401) {
                 // JWT token may be expired
                 // try to get a new one using refresh token
                 console.log("Token expired. Attempting refresh...");
-                this.auth.refreshToken()
-                    .subscribe(res => {
-                        if (res) {
+                var previousRequest = this.currentRequest;
+
+                return this.auth.refreshToken()
+                    .flatMap((refreshed) => {
+                        //if (res) {
                             // refresh token successful
                             console.log("refresh token successful");
 
-                            // re-submit the failed request
-                            var http = this.injector.get(HttpClient);
-                            http.request(this.currentRequest)
-                                .subscribe(res => {
-                                    // do something ???
-                                }, error1 => console.error(error1));
-                        } else {
-                            // refresh token failed
-                            console.log("refresh token failed");
+                            var token = (this.auth.isLoggedIn()) ? this.auth.getAuth()!.token : null;
+                            if (token) {
+                                previousRequest = previousRequest.clone({
+                                    setHeaders: { Authorization: `Bearer ${token}` }
+                                });
+                                console.log("header token reset");
+                            }
+                            return next.handle(previousRequest);
 
-                            // erase current token
-                            this.auth.logout();
-
-                            // redirect to login page
-                            this.router.navigate(["login"]);
-                        }
-                    }, error1 => console.log(error1));
+                            // // re-submit the failed request
+                            // var http = this.injector.get(HttpClient);
+                            // http.request(previousRequest)
+                            //     .subscribe(res => {
+                            //         // do something ???
+                            //     }, error1 => console.error(error1));
+                        // } else {
+                        //     // refresh token failed
+                        //     console.log("refresh token failed");
+                        //
+                        //     // erase current token
+                        //     this.auth.logout();
+                        //
+                        //     // redirect to login page
+                        //     this.router.navigate(["login"]);
+                        // }
+                    });//, error1 => console.log(error1));
             }
         }
 
