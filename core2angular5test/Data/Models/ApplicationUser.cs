@@ -29,6 +29,9 @@ namespace core2angular5test.Data.Models
         
         [Required]
         public DateTime LastModifiedDate { get; set; }
+        
+        [Required]
+        public string DisplayName { get; set; }
         #endregion
         
         #region Lazy-Load Properties

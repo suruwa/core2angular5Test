@@ -25,6 +25,7 @@ import { AnswerEditComponent } from "./answer/answer-edit.component";
 import { ResultListComponent } from "./result/result-list.component";
 import { QuizSearchComponent} from "./quiz/quiz-search.component";
 import { ResultEditComponent } from "./result/result-edit.component";
+import { RegisterComponent } from "./user/register.component";
 
 //Routing
 //PathLocationStrategy - nowa technika, używa history.pushstate
@@ -47,7 +48,8 @@ import { ResultEditComponent } from "./result/result-edit.component";
         AnswerEditComponent,
         ResultListComponent,
         QuizSearchComponent,
-        ResultEditComponent
+        ResultEditComponent,
+        RegisterComponent
     ],
     imports: [
         BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -68,6 +70,7 @@ import { ResultEditComponent } from "./result/result-edit.component";
             { path: 'result/create/:id', component: ResultEditComponent },
             { path: 'about', component: AboutComponent },
             { path: 'login', component: LoginComponent },
+            { path: 'register', component: RegisterComponent },
             { path: '**', component: PageNotFoundComponent }
 
           //{ path: '', redirectTo: 'home', pathMatch: 'full' },
